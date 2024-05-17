@@ -1,0 +1,42 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: sports_campus
+  #配置数据源
+  datasource:
+    url: jdbc:mysql://192.168.255.141:3306/sports_campus?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  #redis连接配置
+  redis:
+    host: 192.168.255.141
+    port: 6379
+    password: 123456
+  servlet:
+    #文件接收配置
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 200MB
+  #热部署配置
+  devtools:
+    restart:
+      additional-paths: src/main/java
+  #spring-cache配置
+  cache:
+    type: redis
+    redis:
+      time-to-live: 60000
+#mybatis-plus配置
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: assign_id
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#自定义参数配置
+file:
+  baseDir: C:\Users\CJW\Desktop\graduation-design\service-back\file\
+  requestPrefix: http://localhost:9000/file/download/
