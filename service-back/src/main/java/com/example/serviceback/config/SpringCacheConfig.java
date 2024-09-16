@@ -6,7 +6,9 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
-import org.springframework.data.redis.serializer.*;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
  * @author CJW
@@ -16,7 +18,7 @@ import org.springframework.data.redis.serializer.*;
 @EnableCaching
 @EnableConfigurationProperties(CacheProperties.class)
 @Configuration
-public class CacheConfig {
+public class SpringCacheConfig {
     /**
      * 自定义spring-cache的配置
      */
@@ -26,7 +28,7 @@ public class CacheConfig {
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig();
         config = config.serializeKeysWith(RedisSerializationContext.SerializationPair.
                 fromSerializer(new StringRedisSerializer()));
-        config=config.serializeValuesWith(RedisSerializationContext.SerializationPair
+        config = config.serializeValuesWith(RedisSerializationContext.SerializationPair
                 .fromSerializer(new GenericJackson2JsonRedisSerializer()));
         // 如果不写一下代码，由于这里新建了默认配置的RedisCacheConfiguration，则不会使用cacheProperties里面配置好的数据，只会使用默认值
         if (redisProperties.getTimeToLive() != null) {

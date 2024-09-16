@@ -3,6 +3,7 @@ package com.example.serviceback.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.serviceback.po.Comment;
 import com.example.serviceback.validation.dto.CommentDTO;
+import com.example.serviceback.vo.CommentVO;
 
 import java.util.List;
 
@@ -41,8 +42,25 @@ public interface CommentService extends IService<Comment> {
 
     /**
      * 获取用户的点赞评论id集合
+     *
      * @param userId 用户id
      * @return
      */
     List<String> getAgreeDataByUserId(Long userId);
+
+    /**
+     * 删除评论
+     *
+     * @param ids       评论id
+     * @param articleId 所属文章id
+     */
+    void deleteBatch(List<Long> ids, Long articleId);
+
+    /**
+     * 获取文章的评论列表
+     *
+     * @param articleId 文章id
+     * @return
+     */
+    List<CommentVO> getCommentList(Long articleId);
 }

@@ -45,11 +45,10 @@ public class ArticleController {
         articleService.deleteArticle(id);
         return Result.success();
     }
-
-    @GetMapping("/page")
+    @GetMapping("/page/{userId}")
     public Result<Page<ArticleVO>> page(@RequestParam Long currentPage, @RequestParam Long pageSize,
-                                        @RequestParam(required = false) String title) {
-        Page<ArticleVO> articleVoPage = articleService.getPage(currentPage, pageSize, title);
+                                        @PathVariable Long userId) {
+        Page<ArticleVO> articleVoPage = articleService.getPage(currentPage, pageSize,userId);
         return Result.success(articleVoPage);
     }
 
@@ -69,5 +68,19 @@ public class ArticleController {
     public Result<List<String>> agreeData(@PathVariable Long userId) {
         List<String> agreeList = articleService.getAgreeDataByUserId(userId);
         return Result.success(agreeList);
+    }
+
+    @GetMapping("/{userId}/{category}")
+    public Result<Page<ArticleVO>> getByUserId(@PathVariable Long userId, @PathVariable Integer category,
+                                               @RequestParam Long currentPage, @RequestParam Long pageSize) {
+        Page<ArticleVO> articleVOPage = articleService.getPageByUserId(userId, category, currentPage, pageSize);
+        return Result.success(articleVOPage);
+    }
+
+    @GetMapping("/search")
+    public Result<List<ArticleVO>> searchKeyword(@RequestParam Long currentPage, @RequestParam Long pageSize,
+                                                 @RequestParam String keyword) throws IOException {
+        List<ArticleVO> articleVOS = articleService.searchByKeyword(currentPage, pageSize, keyword);
+        return Result.success(articleVOS);
     }
 }

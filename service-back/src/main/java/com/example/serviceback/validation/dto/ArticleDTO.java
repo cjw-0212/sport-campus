@@ -31,6 +31,6 @@ public class ArticleDTO {
      * 内容
      */
     @NotBlank(message = "内容不能为空")
-    @Length(max = 20000, message = "内容长度不可超过两万字")
+    @Length(max = 2000, message = "内容长度不可超过两千字")
     private String content;
 }

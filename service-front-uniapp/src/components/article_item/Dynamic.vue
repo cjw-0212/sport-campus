@@ -33,15 +33,7 @@
       <up-row>
         <up-col span="3"></up-col>
         <up-col span="1.5" textAlign="center" align="center">
-           <span @click.stop="clickThumbsup()">
-            <up-icon :name="isLike?'heart-fill':'heart'" size="18"
-                     :label="likeCount?likeCount:''"
-                     :color="isLike?'#fb5f5f':'gray'"></up-icon>
-					  </span>
-        </up-col>
-        <up-col span="1.5"></up-col>
-        <up-col span="1.5">
-          <span @click.stop="clickChat()">
+           <span @click.stop="clickChat()">
 						 <up-icon name="chat" size="18"
                       :label="chatNumber?chatNumber:''"
              ></up-icon>
@@ -49,10 +41,17 @@
         </up-col>
         <up-col span="1.5"></up-col>
         <up-col span="1.5">
-          <span @click.stop="clickShare()">
-						 <up-icon name="share-square" size="18"
-             ></up-icon>
-					</span>
+          <span @click.stop="clickThumbsup()">
+            <up-icon :name="isLike?'heart-fill':'heart'" size="18"
+                     :label="likeCount?likeCount:''"
+                     :color="isLike?'#fb5f5f':'gray'"></up-icon>
+					  </span>
+        </up-col>
+        <up-col span="1.5"></up-col>
+        <up-col span="1.5">
+          <span @click.stop="clickDelete()">
+            <up-icon name="trash" size="18" v-if="publishUserId===userStore.user.id"></up-icon>
+          </span>
         </up-col>
         <up-col span="1.5"></up-col>
       </up-row>
@@ -62,6 +61,9 @@
 </template>
 
 <script>
+import {useUserStore} from "@/stores/user";
+
+const userStore = useUserStore()
 export default {
   props: {
     avatar: {
@@ -102,7 +104,10 @@ export default {
     },
     operateNoShow: {
       type: Boolean
-    }
+    },
+    publishUserId: {
+      type: String
+    },
   },
   data() {
     return {
@@ -114,26 +119,25 @@ export default {
       heartColor: 'gray',
       userDisplay: 'block',
       operateDisplay: 'block',
+      userStore
     }
   },
   mounted() {
     const res = uni.getSystemInfoSync();
     this.windowHeight = res.windowHeight;
     this.windowWidth = res.windowWidth;
-
     if (this.userNoShow) {
       this.userDisplay = 'none';
     }
     if (this.operateNoShow) {
       this.operateDisplay = 'none';
     }
-
     this.judgeImg();
     this.initOperate();
   },
-  computed:{
-    likeCount(){
-      if (this.likeNumber===0&&this.isLike){
+  computed: {
+    likeCount() {
+      if (this.likeNumber === 0 && this.isLike) {
         return 1
       }
       return this.likeNumber
@@ -214,8 +218,8 @@ export default {
     clickChat() {
       this.$emit('clickChat');
     },
-    clickShare() {
-      this.$emit('clickShare');
+    clickDelete() {
+      this.$emit('clickDelete');
     }
   }
 }

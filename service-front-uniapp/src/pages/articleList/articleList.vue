@@ -1,5 +1,6 @@
 <template>
-  <page-meta :page-style="'overflow:'+(show?'hidden':'visible')"></page-meta>
+  <up-search placeholder="请输入关键字" v-model="keyword" @search="refreshKeyword"
+             @custom="refreshKeyword"></up-search>
   <scroll-view scroll-y lower-threshold="20"
                @scrolltolower="scrollLower"
                refresher-enabled
@@ -17,7 +18,7 @@
           :like-number="article.agreeNumber"
           :chat-number="article.commentNumber"
           :publish-time="Number(article.createTime)"
-          @clickUser="clickUser"
+          @clickUser="clickUser(article.publishUserId)"
           @clickThumbsup="clickThumbsup(article.id)"
           @clickChat="clickChat(article.id,article.publishUserId,article.commentNumber)"
           @clickShare="clickShare"
@@ -36,8 +37,8 @@
   </uni-popup>
   <uni-load-more :status="status"></uni-load-more>
   <uni-fab
-     horizontal="right"
-     @fabClick="fabClick"
+      horizontal="right"
+      @fabClick="fabClick"
   ></uni-fab>
 </template>
 
@@ -48,11 +49,13 @@ import {
   requestArticleAgree,
   requestArticleAgreeData,
   requestArticleDisagree,
-  requestArticlePage
+  requestArticlePage,
+  requestSearchArticle
 } from "@/api/request/article";
 import Dynamic from "@/components/article_item/Dynamic.vue";
 import Comment from "@/components/comment/Comment.vue";
 
+const keyword = ref('')
 const trigger = ref(false)
 const popup = ref()
 const showCommentArticleId = ref<string>()
@@ -64,13 +67,16 @@ const pageParams = ref({
   currentPage: 1,
   pageSize: 5,
 })
-
 const status = ref('more')
 const refresh = () => {
   trigger.value = true;
   pageParams.value.currentPage = 1
   articleList.value = []
-  getArticleData()
+  if (keyword.value.trim() === '') {
+    getArticleData()
+  } else {
+    keywordSearch()
+  }
   setTimeout(() => {
     trigger.value = false;
   }, 1000);
@@ -78,7 +84,11 @@ const refresh = () => {
 const scrollLower = () => {
   status.value = "loading"
   pageParams.value.currentPage++
-  setTimeout(getArticleData, 1000)
+  if (keyword.value.trim() === '') {
+    setTimeout(getArticleData, 1000)
+  } else {
+    setTimeout(keywordSearch, 1000)
+  }
 }
 const title = ref<string>('')
 const agreeArticleIds = ref<string[]>()
@@ -86,7 +96,7 @@ const isLikeGetIndex = (articleId: string) => {
   return agreeArticleIds.value?.includes(articleId)
 }
 const getArticleData = async () => {
-  const res = await requestArticlePage(pageParams.value.currentPage, pageParams.value.pageSize, title.value)
+  const res = await requestArticlePage(pageParams.value.currentPage, pageParams.value.pageSize)
   if (res.data.records.length != 0) {
     articleList.value = articleList.value?.concat(res.data.records)
     status.value = "more"
@@ -94,9 +104,9 @@ const getArticleData = async () => {
     status.value = "no-more"
   }
 }
-const fabClick=()=>{
+const fabClick = () => {
   uni.navigateTo({
-    url:'/pages/articlePublish/articlePublish'
+    url: '/pages/articlePublish/articlePublish'
   })
 }
 const getArticleAgreeData = async () => {
@@ -113,8 +123,10 @@ const clickChat = (articleId: string, publishUserId: string, commentNumber: numb
 const change = (e: any) => {
   show.value = e.show
 }
-const clickUser = () => {
-  console.log("clickUser")
+const clickUser = (id: any) => {
+  uni.navigateTo({
+    url: `/pages/userInfo/userInfo?id=${id}`
+  })
 }
 const clickThumbsup = async (articleId: string) => {
   let isLike = agreeArticleIds.value?.includes(articleId)
@@ -148,6 +160,26 @@ const changeArticleAgreeNumber = (articleId: string, num: number) => {
 
 const clickShare = () => {
   console.log("clickShare")
+}
+const keywordSearch = async () => {
+  const res = await requestSearchArticle(keyword.value, pageParams.value.currentPage, pageParams.value.pageSize)
+  if (res.data.length != 0) {
+    articleList.value = articleList.value?.concat(res.data)
+    status.value = "more"
+  } else {
+    status.value = "no-more"
+  }
+}
+const refreshKeyword = async () => {
+  pageParams.value.currentPage = 1
+  articleList.value = []
+  const res = await requestSearchArticle(keyword.value, pageParams.value.currentPage, pageParams.value.pageSize)
+  if (res.data.length != 0) {
+    articleList.value = articleList.value?.concat(res.data)
+    status.value = "more"
+  } else {
+    status.value = "no-more"
+  }
 }
 onMounted(() => {
   getArticleData()

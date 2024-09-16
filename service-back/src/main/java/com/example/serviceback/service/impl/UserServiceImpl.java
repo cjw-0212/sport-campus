@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.serviceback.constant.CacheName;
 import com.example.serviceback.controller.FileController;
 import com.example.serviceback.exception.MyErrorEnum;
 import com.example.serviceback.exception.MyException;
@@ -11,6 +12,7 @@ import com.example.serviceback.mapper.UserMapper;
 import com.example.serviceback.po.User;
 import com.example.serviceback.service.UserService;
 import com.example.serviceback.util.PasswordUtils;
+import com.example.serviceback.util.RedisUtils;
 import com.example.serviceback.vo.UserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,16 +39,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private FileController fileController;
     @Value("${file.requestPrefix}")
     private String mediaRequestPrefix;
+    @Autowired
+    private RedisUtils redisUtils;
 
     @Override
     public UserVO login(String name, String password) {
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getName, name);
+        queryWrapper.eq(User::getId, name);
         User user = userMapper.selectOne(queryWrapper);
         if (user == null) {
             throw new MyException(MyErrorEnum.USERNAME_PASSWORD_NOT_MATCH);
         }
-        if (!PasswordUtils.match(password, user.getPassword())) {
+        if (!password.equals(user.getPassword())) {
             throw new MyException(MyErrorEnum.USERNAME_PASSWORD_NOT_MATCH);
         }
         //验证通过
@@ -119,10 +123,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Transactional(rollbackFor = Exception.class)
     @Override
     public String updateAvatar(Long id, MultipartFile file) throws IOException {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getId, id);
+        User user = userMapper.selectOne(queryWrapper);
+        String oldAvatar = user.getAvatar();
         String fileName = fileController.upload(file);
         LambdaUpdateWrapper<User> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper.eq(User::getId, id).set(User::getAvatar, fileName);
         this.update(updateWrapper);
+        //更新完成删除旧的资源
+        fileController.deleteFile(oldAvatar);
         return fileName;
     }
 

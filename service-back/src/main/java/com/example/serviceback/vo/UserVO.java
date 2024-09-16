@@ -37,5 +37,11 @@ public class UserVO {
      * 出生日期
      */
     private String birthday;
+    /**
+     * 创建时间（）
+     */
+    private Long createTime;
+
+    private Integer isUserCard;
 }
 

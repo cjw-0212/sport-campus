@@ -3,11 +3,9 @@ package com.example.serviceback.validation.dto;
 import com.example.serviceback.validation.group.RegisterUser;
 import com.example.serviceback.validation.group.UpdateUser;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 /**
  * @author CJW
@@ -19,7 +17,14 @@ public class UserDTO {
      * 主键id
      */
     private Long id;
-
+    /**
+     * 性别(0-未知，1-男生,2-女生)
+     */
+    private Integer sex;
+    /**
+     * 出生日期
+     */
+    private String birthday;
     /**
      * 用户名
      */

@@ -7,22 +7,22 @@
       <form class="cl">
         <view class="t-a">
           <image src="@/static/login_user.png"></image>
-          <input type="text" name="phone" placeholder="请输入用户名" maxlength="10" v-model="name"/>
+          <input type="text" name="phone" placeholder="请输入用户名" maxlength="11" v-model="name"/>
         </view>
         <view class="t-a">
           <image src="@/static/login_pwd.png"></image>
           <input type="password" name="code" maxlength="16" placeholder="请输入密码" v-model="password"/>
         </view>
-        <view class="t-c" @click="forgotPwd">忘记密码</view>
+        <!--        <view class="t-c" @click="forgotPwd">忘记密码</view>-->
         <button @click="login">登 录</button>
       </form>
     </view>
-    <view class="cardBox">
-      <view>
-        还没有登录账号？
-        <text class="txt" @click="register">立刻注册</text>
-      </view>
-    </view>
+    <!--    <view class="cardBox">
+          <view>
+            还没有登录账号？
+            <text class="txt" @click="register">立刻注册</text>
+          </view>
+        </view>-->
     <image class="img-b" src="/static/login_bg2.png"></image>
   </view>
 </template>
@@ -31,11 +31,11 @@
 import {ref} from "vue";
 import {requestUserLogin} from "@/api/request/user";
 import {useUserStore} from "@/stores/user";
-import {onLoad} from "@dcloudio/uni-app";
+import {onLoad, onShow} from "@dcloudio/uni-app";
 
-
+const userStore = useUserStore();
 const uToastRef = ref()
-const name = ref<string>('陈佳炜')
+const name = ref<string>('21251104203')
 const password = ref<string>('123456')
 const register = () => {
   uni.navigateTo({
@@ -58,17 +58,19 @@ const login = () => {
             type: 'success',
             message: "登录成功",
             position: "top",
+            duration: 1000
           })
           setTimeout(() => {
             uni.switchTab({
               url: "/pages/articleList/articleList"
             })
-          }, 500)
+          }, 1000)
         } else {
           uToastRef.value.show({
             type: 'error',
             message: res.message,
-            position: "top"
+            position: "top",
+            duration: 1000
           })
         }
       })
@@ -95,11 +97,23 @@ const paramsValidated = () => {
 const forgotPwd = () => {
   console.log("忘记密码")
 }
+const judgeLogin = () => {
+  const token = userStore.token;
+  if (token != null && token.length !== 0) {
+    uni.switchTab({
+      url: "/pages/articleList/articleList"
+    })
+  }
+}
 onLoad((option) => {
-  if (option!.name != null && option!.password != null) {
+  judgeLogin()
+  /*if (option!.name != null && option!.password != null) {
     name.value = option!.name
     password.value = option!.password
-  }
+  }*/
+})
+onShow(() => {
+  judgeLogin()
 })
 </script>
 

@@ -1,12 +1,12 @@
 package com.example.serviceback.po;
 
-import java.io.Serial;
-import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -14,13 +14,12 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author CJW
- * @since 2024-03-29
+ * @since 2024-07-02
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class ArticleMedia implements Serializable {
 
-    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -37,5 +36,18 @@ public class ArticleMedia implements Serializable {
      * 所属文章id
      */
     private Long articleId;
+
+    /**
+     * 初始创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+
+    /**
+     * 上次更新时间
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updateTime;
+
 
 }

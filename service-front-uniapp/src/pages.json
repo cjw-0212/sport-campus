@@ -32,39 +32,95 @@
       "path": "pages/myInfo/myInfo",
       "style": {
         "navigationBarTitleText": "",
-        "enablePullDownRefresh": true
+        "enablePullDownRefresh": false
       }
     },
     {
       "path": "pages/articleList/articleList",
       "style": {
         "navigationBarTitleText": "",
-        "enablePullDownRefresh": true
+        "enablePullDownRefresh": false
       }
     },
     {
       "path": "pages/concatMe/concatMe",
       "style": {
         "navigationBarTitleText": "",
-        "enablePullDownRefresh": true
+        "enablePullDownRefresh": false
       }
     },
     {
       "path": "pages/changeInfo/changeInfo",
       "style": {
         "navigationBarTitleText": "",
-        "enablePullDownRefresh": true
+        "enablePullDownRefresh": false
       }
     },
     {
       "path": "pages/userArticle/userArticle",
       "style": {
         "navigationBarTitleText": "",
-        "enablePullDownRefresh": true
+        "enablePullDownRefresh": false
       }
     },
     {
       "path": "pages/articlePublish/articlePublish",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/activityList/activityList",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/activityList/activity-detail",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/userActivity/activity-detail",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/activityList/activity-personnel",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/userActivity/activity-personnel",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/activityPublish/activityPublish",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/userActivity/userActivity",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/userInfo/userInfo",
       "style": {
         "navigationBarTitleText": "",
         "enablePullDownRefresh": true
@@ -88,6 +144,12 @@
         "pagePath": "pages/articleList/articleList",
         "iconPath": "static/tabBar_article.png",
         "selectedIconPath": "static/tabBar_article_selected.png"
+      },
+      {
+        "text": "活动",
+        "pagePath": "pages/activityList/activityList",
+        "iconPath": "static/activity.png",
+        "selectedIconPath": "static/activity_selected.png"
       },
       {
         "text": "我的",

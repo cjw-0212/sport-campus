@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author CJW
- * @since 2024-04-11
+ * @since 2024-07-02
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -48,10 +48,12 @@ public class Article implements Serializable {
      * 点赞数
      */
     private Integer agreeNumber;
+
     /**
      * 评论数
      */
     private Integer commentNumber;
+
     /**
      * 初始创建时间
      */
@@ -63,4 +65,6 @@ public class Article implements Serializable {
      */
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
+
+
 }

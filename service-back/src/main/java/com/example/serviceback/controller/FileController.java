@@ -37,6 +37,15 @@ public class FileController {
         return Result.success(fileNames);
     }
 
+    @PostMapping("/uploadOne")
+    public Result<String> uploadOne(@RequestParam MultipartFile file) throws IOException {
+        if (file.isEmpty()) {
+            throw new MyException(MyErrorEnum.FILE_EMPTY);
+        }
+        String fileName = upload(file);
+        return Result.success(fileName);
+    }
+
     @GetMapping("/download/{fileName}")
     public Result<Void> download(@PathVariable String fileName, HttpServletResponse response) throws IOException {
         if (fileName == null || fileName.length() == 0) {
@@ -60,10 +69,7 @@ public class FileController {
         //关闭流
         buffOutputStream.flush();
         buffOutputStream.close();
-        outputStream.flush();
-        outputStream.close();
         buffInputStream.close();
-        inputStream.close();
         return Result.success();
     }
 

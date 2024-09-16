@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -42,10 +43,9 @@ public interface ArticleService extends IService<Article> {
      *
      * @param currentPage 当前页
      * @param pageSize    每页大小
-     * @param title       模糊查询标题字段
      * @return 文章数据分页对象
      */
-    Page<ArticleVO> getPage(Long currentPage, Long pageSize, String title);
+    Page<ArticleVO> getPage(Long currentPage, Long pageSize,Long userId);
 
     /**
      * 用户点赞或取消点赞文章
@@ -66,9 +66,33 @@ public interface ArticleService extends IService<Article> {
 
     /**
      * 保存文章的媒体资源
+     *
      * @param articleId 文章id
-     * @param file 文件
+     * @param file      文件
      * @throws IOException
      */
     void saveMedia(Long articleId, MultipartFile file) throws IOException;
+
+    /**
+     * 根据用户id和分类获取文章列表
+     *
+     * @param userId
+     * @param category
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+    Page<ArticleVO> getPageByUserId(Long userId, Integer category, Long currentPage, Long pageSize);
+
+    /**
+     * 全文检索
+     * @param currentPage
+     * @param pageSize
+     * @param title
+     * @return
+     */
+    List<ArticleVO> searchByKeyword(Long currentPage, Long pageSize, String title) throws IOException;
+
+
+    void prepareRecommendData(Object targetUserId);
 }

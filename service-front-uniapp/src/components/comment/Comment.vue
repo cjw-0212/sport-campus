@@ -142,7 +142,7 @@ const replyFun = async ({params}: any, callback: any) => {
 
 
 const deleteFun = async ({params, mode}: any, callback: any) => {
-  const res = await requestDeleteComment(params)
+  const res = await requestDeleteComment(params,articleId.value!)
   if (res.code === 1) {
     // 当请求成功, 调用callback执行评论删除;目前为了展示效果, 直接执行callback
     setTimeout(() => callback(), 500);

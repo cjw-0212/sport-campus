@@ -86,12 +86,14 @@
         @confirm="delConfirmFun"
     ></uni-popup-dialog>
   </uni-popup>
+  <up-toast ref="uToastRef"></up-toast>
 </template>
 
 <script setup>
 import CommonComp from "./CommentItem.vue";
 import {defineExpose, reactive, ref, watch} from "vue";
 
+const uToastRef = ref()
 const props = defineProps({
   userInfo: {
     type: Object,
@@ -158,9 +160,9 @@ function treeTransForm(data) {
 // 点赞
 let setLike = (item) => {
   item.is_like = !item.is_like;
-  if (item.agreeNumber===0&&!item.is_like){
+  if (item.agreeNumber === 0 && !item.is_like) {
     item.agreeNumber = 0
-  }else {
+  } else {
     item.agreeNumber = item.is_like ? item.agreeNumber + 1 : item.agreeNumber - 1;
   }
 };
@@ -209,6 +211,14 @@ let commentPlaceholder = ref("说点什么..."); // 输入框占位符
 
 // 发送评论
 function sendClick({item1, index1, item2, index2} = replyTemp) {
+  if (commentValue.value == null || commentValue.value.length === 0) {
+    uToastRef.value.show({
+      type: 'error',
+      message: "内容不能为空",
+      position: 'top'
+    })
+    return;
+  }
   let item = item2 || item1;
   let params = {};
   // 新评论
@@ -236,7 +246,7 @@ function sendClick({item1, index1, item2, index2} = replyTemp) {
     articlePublishUserId: props.userInfo.articlePublishUserId,
     createTime: '刚刚',
     owner: props.userInfo.userId === props.userInfo.articlePublishUserId,
-    agreeNumber:0
+    agreeNumber: 0
   };
   uni.showLoading({
     title: "正在发送",

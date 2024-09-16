@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.serviceback.mapper.CommentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.serviceback.po.Comment">
+        <id column="id" property="id" />
+        <result column="parent_comment_id" property="parentCommentId" />
+        <result column="article_id" property="articleId" />
+        <result column="content" property="content" />
+        <result column="publish_user_id" property="publishUserId" />
+        <result column="publish_user_name" property="publishUserName" />
+        <result column="publish_user_avatar" property="publishUserAvatar" />
+        <result column="reply_user_name" property="replyUserName" />
+        <result column="reply_comment_id" property="replyCommentId" />
+        <result column="agree_number" property="agreeNumber" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, parent_comment_id, article_id, content, publish_user_id, publish_user_name, publish_user_avatar, reply_user_name, reply_comment_id, agree_number, create_time, update_time
+    </sql>
+
+</mapper>

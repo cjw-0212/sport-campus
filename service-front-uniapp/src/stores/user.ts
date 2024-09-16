@@ -15,7 +15,9 @@ export const useUserStore = defineStore(
             token.value = value
         }
         const clear = () => {
-            user.value = {avatar: "", createTime: "", id: "", intro: "", isUsable: 0, name: ""}
+            user.value = {
+                isUserCard: 0,
+                birthday: "", sex: 0, avatar: "", createTime: "", id: "", intro: "", isUsable: 0, name: ""}
             token.value = ''
         }
         return {

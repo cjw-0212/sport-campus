@@ -184,7 +184,7 @@ public class RedisUtils {
     }
 
     /**
-     * 设置ASCII码, 字符串'a'的ASCII码是97, 转为二进制是'01100001', 此方法是将二进制第offset位值变为value
+     * 设置ASCII码, 字符串'PublishParentComment'的ASCII码是97, 转为二进制是'01100001', 此方法是将二进制第offset位值变为value
      */
     public boolean setBit(String key, long offset, boolean value) {
         return Boolean.TRUE.equals(redisTemplate.opsForValue().setBit(key, offset, value));

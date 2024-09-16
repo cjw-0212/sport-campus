@@ -5,6 +5,7 @@ export type User = {
     intro: string;
     isUsable: number;
     createTime: string;
-    sex:number;
-    birthday:string;
+    sex: number;
+    birthday: string;
+    isUserCard: number
 }

@@ -34,9 +34,7 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: assign_id
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 #自定义参数配置
 file:
-  baseDir: C:\Users\CJW\Desktop\graduation-design\service-back\file\
+  baseDir: D:\MyProject\sport-campus\service-back\file\
   requestPrefix: http://localhost:9000/file/download/

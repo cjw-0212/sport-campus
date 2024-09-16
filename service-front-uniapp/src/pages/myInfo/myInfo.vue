@@ -26,6 +26,13 @@
         </view>
         <u-icon name="arrow-right"></u-icon>
       </view>
+      <view class="menu-item" @click="goPage('userActivity')">
+        <view class="left">
+          <image class="menu-icon" src="/static/myInfo_activity.png"></image>
+          <view class="menu-name">我的活动</view>
+        </view>
+        <u-icon name="arrow-right"></u-icon>
+      </view>
       <view class="menu-item" @click="goPage('changeInfo')">
         <view class="left">
           <image class="menu-icon" src="/static/myInfo_user.png"></image>
@@ -40,7 +47,7 @@
         </view>
         <u-icon name="arrow-right"></u-icon>
       </view>
-      <view class="menu-item">
+      <view class="menu-item" @click="show=true">
         <view class="left">
           <image class="menu-icon" src="/static/myInfo_logout.png"></image>
           <view class="menu-name">退出登录</view>
@@ -50,22 +57,37 @@
     </view>
     <!-- 列表菜单 - 结束 -->
   </view>
+  <up-modal :show="show" content='确认退出登录' @confirm="logout" @cancel="show=false"
+            :showCancelButton="true" contentTextAlign="center"></up-modal>
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {ref} from "vue";
 import type {User} from "@/types/user";
 import {useUserStore} from "@/stores/user";
+import {requestUserInfo} from "@/api/request/user";
+import {onShow} from "@dcloudio/uni-app";
 
+const show = ref(false)
 const userStore = useUserStore()
 const goPage = (pageName: string) => {
   uni.navigateTo({
     url: `/pages/${pageName}/${pageName}`
   })
 }
+const init = async () => {
+  const res = await requestUserInfo()
+  userInfo.value = res.data
+}
 const userInfo = ref<User>()
-onMounted(() => {
-  userInfo.value = userStore.user
+const logout = () => {
+  userStore.clear();
+  uni.navigateTo({
+    url: "/pages/login/login"
+  })
+}
+onShow(() => {
+  init()
 })
 </script>
 <style>

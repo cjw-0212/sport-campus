@@ -47,10 +47,10 @@ export const requestCommentListById = (articleId: string) => {
     })
 }
 
-export const requestDeleteComment = (commentIds: string[]) => {
+export const requestDeleteComment = (commentIds: string[],articleId:string) => {
     console.log(commentIds)
     return http<void>({
-        url: '/comment',
+        url: `/comment/${articleId}`,
         method: "DELETE",
         header: {
             'content-type': 'application/x-www-form-urlencoded'

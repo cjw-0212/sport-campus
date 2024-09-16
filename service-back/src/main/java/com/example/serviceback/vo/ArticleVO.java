@@ -53,4 +53,5 @@ public class ArticleVO {
      * 媒体资源路径集合
      */
     private List<String> medias;
+    private Integer isRecommend;
 }

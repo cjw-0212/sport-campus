@@ -4,14 +4,13 @@ import type {Page} from "@/types/page";
 import {useUserStore} from "@/stores/user";
 
 const userStore = useUserStore()
-export const requestArticlePage = (currentPage: number, pageSize: number, title?: string) => {
+export const requestArticlePage = (currentPage: number, pageSize: number) => {
     return http<Page<Article[]>>({
-        url: "/article/page",
+        url: `/article/page/${userStore.user!.id}`,
         method: "GET",
         data: {
             currentPage: currentPage,
             pageSize: pageSize,
-            title: title
         }
     })
 }
@@ -37,14 +36,14 @@ export const requestArticleAgreeData = () => {
     })
 }
 
-export const requestPublishArticleText = ( title: string, content: string) => {
+export const requestPublishArticleText = (title: string, content: string) => {
     return http<string>({
         url: "/article/publish/text",
-        method:"POST",
+        method: "POST",
         header: {
             'content-type': 'application/json'
         },
-        data:{
+        data: {
             "publishUserId": userStore.user!.id,
             "publishUserName": userStore.user!.name,
             "title": title,
@@ -53,11 +52,40 @@ export const requestPublishArticleText = ( title: string, content: string) => {
     })
 }
 
-export const requestPublishArticleMedia=(articleId:string,filePath:string)=>{
+export const requestPublishArticleMedia = (articleId: string, filePath: string) => {
     return submitFile<void>({
-        url:`/article/publish/media/${articleId}`,
-        name:"file",
-        filePath:filePath
+        url: `/article/publish/media/${articleId}`,
+        name: "file",
+        filePath: filePath
     })
 }
 
+export const requestArticleListByUserId = (category: number, currentPage: number, pageSize: number) => {
+    return http<Page<Article[]>>({
+        url: `/article/${userStore.user!.id}/${category}`,
+        method: "GET",
+        data: {
+            currentPage: currentPage,
+            pageSize: pageSize,
+        }
+    })
+}
+
+export const requestSearchArticle = (keyword: string, currentPage: number, pageSize: number) => {
+    return http<Article[]>({
+        url: "/article/search",
+        method: "GET",
+        data: {
+            currentPage: currentPage,
+            pageSize: pageSize,
+            keyword: keyword
+        }
+    })
+}
+
+export const requestDeleteArticle = (id: string) => {
+    return http<void>({
+        url: `/article/${id}`,
+        method: "DELETE"
+    })
+}

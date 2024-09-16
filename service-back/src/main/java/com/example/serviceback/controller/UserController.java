@@ -17,8 +17,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.PositiveOrZero;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,15 +42,14 @@ public class UserController {
         return Result.success();
     }
 
-
     @PostMapping("/login")
-    public Result<UserVO> login(@Validated(RegisterUser.class) @RequestBody UserDTO userDTO) {
+    public Result<UserVO> login(@RequestBody UserDTO userDTO) {
         UserVO userVO = userService.login(userDTO.getName(), userDTO.getPassword());
         //分发token
         Map<String, Object> claim = new HashMap<>(1);
         claim.put("id", userVO.getId());
-        String token=JwtUtils.createJwt(claim);
-        Result<UserVO> result=Result.success(userVO);
+        String token = JwtUtils.createJwt(claim);
+        Result<UserVO> result = Result.success(userVO);
         result.setMessage(token);
         return result;
     }
@@ -89,5 +86,13 @@ public class UserController {
     public Result<String> avatar(@PathVariable Long id, @RequestParam MultipartFile avatar) throws IOException {
         String fileName = userService.updateAvatar(id, avatar);
         return Result.success(fileName);
+    }
+
+    @PutMapping("/changeInfo")
+    public Result<Void> changeInfo(@RequestBody UserDTO userDTO) {
+        User user = new User();
+        BeanUtils.copyProperties(userDTO, user);
+        userService.updateById(user);
+        return Result.success();
     }
 }
